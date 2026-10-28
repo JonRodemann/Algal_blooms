@@ -19,6 +19,7 @@ datjg <- read.csv('SSA_jg.csv')
 datchpstage <- read.csv('SSA_chpstage.csv')
 datgrabwind <- read.csv('SSA_chlgrabwbwind.csv')
 datloads <- read.csv('SSA_loads.csv')
+datarea <- read.csv('SSA_area_updated.csv')
 colnames( dat )
 
 datsat <- datsat %>% dplyr::select(-date)
@@ -36,6 +37,7 @@ dat <- cbind(dat, datjg)
 dat <- cbind(dat, datchpstage)
 dat <- cbind(dat, datgrabwind)
 dat <- cbind(dat, datloads)
+dat <- cbind(dat, datarea)
 names(dat)
 dat <- dat %>% dplyr::select(-X)
 ggplot(dat)+
@@ -580,6 +582,39 @@ plot( x = ccm$LibMeans$LibSize,
   gtnloadgargrabchl <- loopccmlaglead(dat, 'gtnload', 'gargrabchl', 12,2,1,3)
   gtploadgargrabchl <- loopccmlaglead(dat, 'gtpload', 'gargrabchl', 12,2,1,3)
   gdocloadgargrabchl <- loopccmlaglead(dat, 'gdocload', 'gargrabchl', 12,2,1,3)
+  
+  #area_updated first. e = 3, t = 2, er = 4
+  actparea <- loopccmlaglead(dat, 'actp', 'area_updated', 12,3,2,4)
+  aflowarea <- loopccmlaglead(dat, 'aflow', 'area_updated', 12,3,2,4)
+  acdocarea <- loopccmlaglead(dat, 'acdoc', 'area_updated', 12,3,2,4)
+  amaxstagearea <- loopccmlaglead(dat, 'amaxstage', 'area_updated', 12,3,2,4)
+  rchlarea <- loopccmlaglead(dat, 'rchl', 'area_updated', 12,3,2,4)
+  rTNarea <- loopccmlaglead(dat, 'rTN', 'area_updated', 12,3,2,4)
+  marshmeanrainarea <- loopccmlaglead(dat, 'marshmeanrain', 'area_updated', 12,3,2,4)
+  gsmeanstagearea <- loopccmlaglead(dat, 'gsmeanstage', 'area_updated', 12,3,2,4)
+  actnarea <- loopccmlaglead(dat, 'actn', 'area_updated', 12,3,2,4)
+  gTParea <- loopccmlaglead(dat, 'gTP', 'area_updated', 12,3,2,4)
+  gTNarea <- loopccmlaglead(dat, 'gTN', 'area_updated', 12,3,2,4)
+  rTParea <- loopccmlaglead(dat, 'rTP', 'area_updated', 12,3,2,4)
+  gchlarea <- loopccmlaglead(dat, 'gchl', 'area_updated', 12,3,2,4)
+  gsalarea <- loopccmlaglead(dat, 'gsal', 'area_updated', 12,3,2,4)
+  rsalarea <- loopccmlaglead(dat, 'rsal', 'area_updated', 12,3,2,4)
+  gTOCarea <- loopccmlaglead(dat, 'gTOC', 'area_updated', 12,3,2,4)
+  rTOCarea <- loopccmlaglead(dat, 'rTOC', 'area_updated', 12,3,2,4)
+  rpHarea <- loopccmlaglead(dat, 'rpH', 'area_updated', 12,3,2,4)
+  gpHarea <- loopccmlaglead(dat, 'gpH', 'area_updated', 12,3,2,4)
+  gsrainfallarea <- loopccmlaglead(dat, 'gsrainfall', 'area_updated', 12,3,2,4)
+  acnh4area <- loopccmlaglead(dat, 'acnh4', 'area_updated', 12,3,2,4)
+  aflowcumarea <- loopccmlaglead(dat, 'aflow_cum', 'area_updated', 12,3,2,4)
+  gnh4area <- loopccmlaglead(dat, 'gNH4', 'area_updated', 12,3,2,4)
+  dcbrarea <- loopccmlaglead(dat, 'dcbr', 'area_updated', 12,3,2,4)
+  dcbrearea <- loopccmlaglead(dat, 'dcbre', 'area_updated', 12,3,2,4)
+  wbwinddirarea <- loopccmlaglead(dat, 'wbwinddir', 'area_updated', 12,3,2,4)
+  wbwindspeedarea <- loopccmlaglead(dat, 'wbwindspeed', 'area_updated', 12,3,2,4)
+  gtnloadarea <- loopccmlaglead(dat, 'gtnload', 'area_updated', 12,3,2,4)
+  gtploadarea <- loopccmlaglead(dat, 'gtpload', 'area_updated', 12,3,2,4)
+  gdocloadarea <- loopccmlaglead(dat, 'gdocload', 'area_updated', 12,3,2,4)
+
 
 
   
@@ -841,6 +876,12 @@ rhogargrabrsal <- rho_lagleadfun_parallel(dat, 'rsal', 'gargrabchl', 2,1,3,100,1
 rhogargrabgtpload <- rho_lagleadfun_parallel(dat, 'gtpload', 'gargrabchl', 2,1,3,100,12)
 rhogargrabgdocload <- rho_lagleadfun_parallel(dat, 'gdocload', 'gargrabchl', 2,1,3,100,12)
 
+#area_updated
+rhoareaacdoc <- rho_lagleadfun_parallel(dat, 'acdoc', 'area_updated', 3,2,4,100,12)
+rhoarearTP <- rho_lagleadfun_parallel(dat, 'rTP', 'area_updated', 3,2,4,100,12)
+rhoareagsrainfall <- rho_lagleadfun_parallel(dat, 'gsrainfall', 'area_updated', 3,2,4,100,12)
+rhoareagtnload <- rho_lagleadfun_parallel(dat, 'gtnload', 'area_updated', 3,2,4,100,12)
+rhoareadcbre <- rho_lagleadfun_parallel(dat, 'dcbre', 'area_updated', 3,2,4,100,12)
 
 future::plan(sequential)
 
@@ -999,6 +1040,18 @@ ggtploadgargrab <- graphlag(gtploadgargrabchl, rhogargrabgtpload)
 ggtploadgargrab
 ggdocloadgargrab <- graphlag(gdocloadgargrabchl, rhogargrabgdocload)
 ggdocloadgargrab
+gacdocarea1 <- graphlag(acdocarea, rhoareaacdoc)
+gacdocarea1
+grTParea <- graphlag(rTParea, rhoarearTP)
+grTParea
+ggsrainfallarea <- graphlag(gsrainfallarea, rhoareagsrainfall)
+ggsrainfallarea
+gdcbrearea <- graphlag(dcbrearea, rhoareadcbre)
+gdcbrearea
+ggtnloadarea <- graphlag(gtnloadarea, rhoareagtnload)
+ggtnloadarea
+
+
 
 ggsave(filename = 'plots/gtocarea_lag.png', plot = ggtocarea)
 ggsave(filename = 'plots/mcdocarea_lag.png', plot = gmcdocarea)
@@ -1043,11 +1096,13 @@ ggsave(filename = 'plots/gargrabamaxstage_lag.png', plot = gamaxstagegargrab)
 ggsave(filename = 'plots/gargrabrtoc_lag.png', plot = grTOCgargrab)
 ggsave(filename = 'plots/gargrabgtpload_lag.png', plot = ggtploadgargrab)
 ggsave(filename = 'plots/gargrabgdocload_lag.png', plot = ggdocloadgargrab)
+ggsave(filename = 'plots/area_updatedacdoc_lag.png', plot = gacdocarea1)
+
 
 ##CCM graphs at the max lag for significant variables
 #function to graph
 graphccmlag <- function(dat, x, y, z, e, t, er){ # x = cause (string), y = effect (string), z = best lag
-  
+  par(mfrow = c(1, 1))
   df1 <- dat %>%
     dplyr::select(date, !!sym(x), !!sym(y)) %>%
     dplyr::rename(xvar = !!sym(x), yvar = !!sym(y))  # consistent column names for lag and ccm
@@ -1243,6 +1298,12 @@ lagrTOCgargrab <- graphccmlag(dat, 'rTOC', 'gargrabchl', 7, 2, 1, 3)
 laggtploadgargrab <- graphccmlag(dat, 'gtpload', 'gargrabchl', 1, 2, 1, 3)
 laggdocloadgargrab <- graphccmlag(dat, 'gdocload', 'gargrabchl', 1, 2, 1, 3)
 
+#area - e = 3, t = 4, er = 5
+par(mfrow = c(1, 1))
+dev.off()
+glagacdocarea1 <- graphccmlag(dat, 'acdoc', 'area_updated', 3,2,4,1)
+glagacdocarea1
+
 #S-mapping to look at relationships
 #rchl and lag of dcbre
 
@@ -1254,26 +1315,49 @@ df2 <- dat %>%
 
 libsize_str <- paste("6", nrow(df2)-12, "6")
 smap_gargrabaflow <- SMap(dataFrame = df2,
-           E = 3, # embedding dimension
-           tau = -4, # embedding delay
-           exclusionRadius = 4,  # Theiler window
-           target = "ll",       
+           E = 2, # embedding dimension
+           tau = -1, # embedding delay
+           exclusionRadius = 3,  # Theiler window
+           target = "gargrabchl",       
            lib = '1 60',
            pred = '61 88',
            embedded = T,
-           columns = 'll gargrabchl')
+           columns = 'll gargrabchl',
+           theta = 0.2)
 smap_gargrabaflow$predictions
 smap_gargrabaflow$coefficients
-?SMap
+
+#rchl - e = 3, t = 3, er = 2
+df3 <- dat %>%
+  dplyr::select(date, rchl, dcbre) %>% 
+  mutate(ll = lag(dcbre, 6)) %>%
+  dplyr::select(date, rchl, ll) %>%
+  drop_na()
+
+libsize_str <- paste("6", nrow(df2)-12, "6")
+smap_rchldcbre <- SMap(dataFrame = dat %>% dplyr::select(date, rchl, dcbre),
+                          E = 3, # embedding dimension
+                          tau = -3, # embedding delay
+                          exclusionRadius = 2,  # Theiler window
+                          target = "rchl",       
+                          lib = '1 60',
+                          pred = '61 88',
+                          embedded = T,
+                          columns = 'dcbre rchl',
+                          theta = 0.5)
+smap_rchldcbre$predictions
+smap_rchldcbre$coefficients
+
+SMap
 ?CCM
 
 names(dat)
 head(dat)
-dat <- dat %>% dplyr::select(-X) %>% mutate(date = ymd(date))
+dat <- dat %>% mutate(date = ymd(date))
 ggplot(dat)+
-  geom_line(aes(x = date, y = lag(aflow,1)))+
-  geom_line(aes(x = date, y = gargrabchl), color = 'green', inherit.aes = F)+
+  geom_line(aes(x = date, y = lag(dcbre,6)))+
+  geom_line(aes(x = date, y = rchl/20), color = 'green', inherit.aes = F)+
   theme_classic()
 
-cor.test(x = dat$jturb, y = dat$jchl)
+
 

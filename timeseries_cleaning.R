@@ -828,3 +828,34 @@ ggplot()+
 ggsave(filename = 'plots/garfield_grab_samples.png', width = 8, height = 4)
 
 head(cdm)
+
+##Adding updated area to coastal month data
+dat <- read.csv('coastal_data_month2.csv')
+dat$date <- ymd(dat$date)
+area <- read.csv('Data/Clean/sat_dat_usf_updated.csv')
+
+str(area)
+
+area1 <- area %>%
+  mutate(
+    # Extract the first 7 characters (assuming format like "YYYY-MM")
+    # Paste "-01" to set the day to the first of the month, then convert to Date object
+    date = ymd(paste0(substr(source_file, 1, 7), "-01"))
+  ) %>%
+  # Keep only the newly created 'date' column and rename 'total_artea_m2' to 'area_updated'
+  select(
+    date,
+    area_updated = total_area_m2
+  )
+
+# View the first few rows of the cleaned data
+head(area1)
+
+
+str(garchl1)
+str(dat)
+dat$date <- as.Date(dat$date)
+cdm <- dat %>% left_join(area1, by = 'date')
+cdm <- cdm %>% mutate(gargrabchl = if_else(gargrabchl > 100, 56.48, gargrabchl))
+
+write.csv(file = 'coastal_data_month3.csv', cdm)

@@ -8,26 +8,37 @@ library(zoo)
 library(tidyverse)
 
 #### Load data#####
-  dat2 <- read.csv(file = 'coastal_data_month2.csv')
+  dat2 <- read.csv(file = 'coastal_data_month3.csv')
   
   
   dat2 <- dat2 %>% dplyr::filter(date > ymd('2016-01-01'))
   dat2 <- dat2 %>% dplyr::filter(date < ymd('2024-04-01'))
   
-  dat2 <- dat2 %>% mutate(gtnload = if_else(aflow < 0, 0, actn*aflow), gtpload = if_else(aflow < 0, 0, actp*aflow), gdocload = if_else(aflow < 0, 0, acdoc*aflow))
-
-head(dat2)
+  
+  head(dat2)
   
   dat_int <- dat2 %>% dplyr::select(-date) %>% 
     mutate(across(everything(), ~ na.approx(., na.rm = FALSE)))
   dat_int <- dat_int %>% slice(2:(n()-1))
-  dat_int$date <- dat2 %>% slice(2:(n()-1)) %>% dplyr::select(date)
+  dat_int$date <- dat2 %>% slice(2:(n()-1)) %>% dplyr::select(date) %>% dplyr::mutate(date = ymd(date))
+  dat_int <- dat_int %>%
+    mutate(
+      date = as.Date(unlist(date), origin = "1970-01-01"),
+      area_updated = as.numeric(unlist(area_updated))
+    )
+
+  ggplot(data = dat_int, aes(x = date, y = area_updated))+
+    geom_line()+
+    theme_classic()
+  
+  dat_int$area_updated[2] <- 15557077 - (20822687 - 15557077)
+  dat_int$area_updated[1] <- dat_int$area_updated[2] - (20822687 - 15557077)
   
 head(dat_int)
 #### Plot frequencies######## Plot frequencies####
   # select dat column
     colnames( dat_int )
-    var <- 'gdocload'
+    var <- 'area_updated'
     x <- dat_int[,var]
   # Fourier transform
     spec <- spectrum( x, method = 'pgram', plot = FALSE )
@@ -158,6 +169,7 @@ head(dat_int)
     grp <- list(c(1), c(2,3), c(4,6,7,10), c(5,8,9,11)) #gtnload
     grp <- list(c(1), c(2,3), c(4,5), c(6,7), c(8,9)) #gtpload
     grp <- list(c(1), c(2,3), c(4,5), c(6,7,8,9,10,11,12,15,18), c(13,14,16,17)) #gdocload
+    grp <- list(c(1), c(2,3), c(4), c(5,6,7), c(8,9), c(10,12), c(11,13)) #area_updated
 
 
   
@@ -223,11 +235,11 @@ head(dat_int)
 
  ####   
     signal
-gdocload <- data.frame(signal) %>% setNames('gdocload')
+area <- data.frame(signal) %>% setNames('area_updated')
 
 allssa <- cbind(gtnload, gtpload, gdocload)
 
-write.csv(allssa, file = 'SSA_loads.csv')
+write.csv(area, file = 'SSA_area_updated.csv')
 
 
 

@@ -8,7 +8,7 @@ library(lubridate)
 library(stringr)
 library(circular)
 
-tif_files <- list.files('Data/geotiff', pattern = "\\.tif$", full.names = TRUE)
+tif_files <- list.files('Data/geotiff/updated', pattern = "\\.tif$", full.names = TRUE)
 
 # Initialize lists to store results
 results_list <- list()
@@ -97,7 +97,7 @@ area_summary <- summary_utm %>%
     northing = st_coordinates(geometry)[, 2]
   ) %>% st_drop_geometry()
 
-write.csv(area_summary, file = 'Data/Clean/sat_dat_usf.csv')
+write.csv(area_summary, file = 'Data/Clean/sat_dat_usf_updated.csv')
 ##Now wind data
 txt_files <- list.files('Data/Buoy_kw', pattern = "\\.txt$", full.names = TRUE)
 

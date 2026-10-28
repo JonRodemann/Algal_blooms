@@ -17,8 +17,9 @@ write.csv(dat, file = 'SSA_run4_wcumflowccgnh4ecdcjg.csv')
 
 dat <- read.csv('SSA_chlgrabwbwind.csv')
 dat <- read.csv('SSA_loads.csv')
+dat <- read.csv('SSA_area_updated.csv')
 colnames( dat )
-  var <- 'etemp'
+  var <- 'area_updated'
   x <- dat[,var] |> na.omit()
   x <- scale( x )
 
